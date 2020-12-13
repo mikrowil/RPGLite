@@ -1,23 +1,40 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {StyleSheet, View} from 'react-native'
+import {createAppContainer,createSwitchNavigator} from 'react-navigation'
+import VictoryScreen from "./inc/Views/VictoryScreen";
+import FightScreen from './inc/Views/FightScreen'
+import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
 
-export default function App() {
-  const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
-
-  if (!isLoadingComplete) {
-    return null;
-  } else {
+export default class App extends React.Component{
+  render() {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+        <View style={styles.container}>
+            <AppContainer/>
+        </View>
     );
   }
 }
+
+const Nav = createSwitchNavigator({
+    Fight:FightScreen,
+    Victory:VictoryScreen,
+})
+
+const AppContainer = createAppContainer(Nav)
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        borderWidth:1,
+    },
+
+    header:{
+        width:wd("100%"),
+        height:hd("10%"),
+        backgroundColor:"red",
+    },
+})
