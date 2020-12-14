@@ -1,14 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {Text, View, StyleSheet,TouchableOpacity} from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import Monster from "../Entities/Monster";
 import Player from "../Entities/Player";
 import {widthPercentageToDP as wd, heightPercentageToDP as hd} from 'react-native-responsive-screen'
+import {NavigationProp} from "react-navigation";
 
 let monster = new Monster(0,1,3,"Sheep",5,0,100,100,false)
 let player = new Player(0,1,0,0,"player",10,10,100,100,false)
 
 interface IProps {
+
 }
 
 interface IState {
@@ -29,6 +32,8 @@ export default class FightScreen extends React.Component<IProps,IState>{
         }
 
     }
+
+
 
     playerAttack = (dmg:number) => {
 

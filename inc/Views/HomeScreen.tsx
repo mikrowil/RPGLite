@@ -32,8 +32,11 @@ export default class HomeScreen extends React.Component<IProps,IState>{
         return(
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text>RPG SIM V:na</Text>
+                    <Text style={styles.header_text}>RPG SIM V:na</Text>
                 </View>
+                <TouchableOpacity style={styles.button_main}>
+                    <Text style={styles.button_main_text}>Fight Sheep</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -47,7 +50,37 @@ const styles = StyleSheet.create({
 
     },
     header:{
-        backgroundColor:"#ff8787",
+        backgroundColor:"#20ffe3",
+        width:wd("100%"),
+        height:hd("10"),
+        marginTop:45,
+    },
+    header_text:{
+        marginTop:"auto",
+        marginBottom:"auto",
+        textAlign:"center",
+        fontSize:40,
+    },
+    button_main:{
+
+        marginTop:"auto",
+        marginBottom:"auto",
+        marginLeft:"auto",
+        marginRight:"auto",
+
+        width:100,
+        height:100,
+
+        backgroundColor:"#da3cf8",
+
+        borderRadius:90,
+    },
+    button_main_text:{
+        fontSize:20,
+        textAlign:"center",
+        marginTop:"auto",
+        marginBottom:"auto",
+
     }
 
 })

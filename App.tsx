@@ -5,6 +5,7 @@ import {createAppContainer,createSwitchNavigator} from 'react-navigation'
 import VictoryScreen from "./inc/Views/VictoryScreen";
 import FightScreen from './inc/Views/FightScreen'
 import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
+import HomeScreen from "./inc/Views/HomeScreen";
 
 
 export default class App extends React.Component{
@@ -18,6 +19,7 @@ export default class App extends React.Component{
 }
 
 const Nav = createSwitchNavigator({
+    Home:HomeScreen,
     Fight:FightScreen,
     Victory:VictoryScreen,
 })
