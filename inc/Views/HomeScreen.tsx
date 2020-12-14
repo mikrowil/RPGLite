@@ -7,6 +7,8 @@ import {widthPercentageToDP as wd, heightPercentageToDP as hd} from 'react-nativ
 
 
 interface IProps {
+    //Left undefined because i dont know the data type
+    navigation:undefined
 }
 
 interface IState {
@@ -26,6 +28,11 @@ export default class HomeScreen extends React.Component<IProps,IState>{
 
     }
 
+    goToFightScreen = () => {
+        //Can be ignored because props.navigation will always be the correct type
+        // @ts-ignore
+        this.props.navigation.navigate("Fight")
+    }
 
     render() {
 
@@ -34,7 +41,7 @@ export default class HomeScreen extends React.Component<IProps,IState>{
                 <View style={styles.header}>
                     <Text style={styles.header_text}>RPG SIM V:na</Text>
                 </View>
-                <TouchableOpacity style={styles.button_main}>
+                <TouchableOpacity onPress={() => this.goToFightScreen()} style={styles.button_main}>
                     <Text style={styles.button_main_text}>Fight Sheep</Text>
                 </TouchableOpacity>
             </View>

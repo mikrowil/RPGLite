@@ -8,6 +8,7 @@ import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-nativ
 import HomeScreen from "./inc/Views/HomeScreen";
 
 
+
 export default class App extends React.Component{
   render() {
     return (
