@@ -1,25 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native'
-import { useNavigation } from '@react-navigation/native';
 import Monster from "../Entities/Monster";
 import Player from "../Entities/Player";
 import {widthPercentageToDP as wd, heightPercentageToDP as hd} from 'react-native-responsive-screen'
-import {NavigationProp} from "react-navigation";
+import HealthBar from "../Components/HealthBar";
 // @ts-ignore
 import background from '../../assets/images/background_fightScreen_forest_1.jpg'
 
 
-let monster = new Monster(0,1,3,"Sheep",5,0,100,100,false)
-let player = new Player(0,1,0,0,"player",10,10,100,100,false)
+let monster = new Monster(0,1,3,"Sheep",1,0,100,100,false)
+let player = new Player(0,1,0,0,"player",1,1,100,100,false)
 
 interface IProps {
-
+    navigation:undefined,
 }
 
 interface IState {
     monster:Monster,
     player:Player,
+    strongAttack: [boolean,number,any]
+
 }
 
 
@@ -32,18 +32,52 @@ export default class FightScreen extends React.Component<IProps,IState>{
         this.state = {
             monster:monster,
             player:player,
+            strongAttack:[false, 0,styles.button_text],
+
         }
 
     }
 
 
 
-    playerAttack = (dmg:number) => {
+    playerAttack = (dmg:number,name:string) => {
+
+
+
 
         if(this.state.monster.isDead){
             this.reset()
             return
         }
+
+        if(name==="str" && this.state.strongAttack[0]){
+            return;
+        }
+
+        let ham = this.state.strongAttack;
+        if(this.state.strongAttack[0]){
+
+
+            ham[1]++;
+
+            if(ham[1] >= 3){
+                ham[0] = false;
+                ham[1] = 0;
+                ham[2] = styles.button_text;
+
+
+            }
+
+            this.setState({strongAttack:ham});
+
+
+        }else {
+            if(name === "str"){
+                ham[0] = true;
+                ham[2] = styles.button_cool_down
+            }
+        }
+
 
         let updateMonster = this.state.monster
 
@@ -54,6 +88,8 @@ export default class FightScreen extends React.Component<IProps,IState>{
             updateMonster.health = 0
             updateMonster.isDead = true
         }
+
+
 
         this.setState({monster:updateMonster})
 
@@ -94,6 +130,11 @@ export default class FightScreen extends React.Component<IProps,IState>{
         return calculatedDmg
     }
 
+    goBack(){
+        // @ts-ignore
+        this.props.navigation.navigate('Home')
+    }
+
     reset= () => {
         let updatedMonster = this.state.monster
         updatedMonster.isDead = false;
@@ -103,25 +144,35 @@ export default class FightScreen extends React.Component<IProps,IState>{
         let updatedPlayer = this.state.player
         updatedPlayer.health = this.state.player.maxHealth
         this.setState({player:updatedPlayer})
+
+        this.setState({strongAttack:[false,0,styles.button_text]})
     }
 
 
     render() {
 
-            return (
+
+        return (
                 <View style={styles.container}>
                     <View style={styles.enemyDisplay}>
                         <Text style={styles.monster_name}>{this.state.monster.name} LVL: {this.state.monster.level}</Text>
-                        <Text style={styles.monster_health}>{monster.health} / {monster.maxHealth}</Text>
+                        <View style={styles.health_bar}>
+                            <HealthBar max = {this.state.monster.maxHealth}
+                                       current = {this.state.monster.health}/>
+                        </View>
                     </View>
+
                     <ImageBackground source={background} style={styles.areaDisplay}>
 
                     </ImageBackground>
                     <View style={styles.playerDisplay}>
                         <Text>LVL: {this.state.player.level}   Health: {this.state.player.health} / {this.state.player.maxHealth}</Text>
                         <Text>EXP: {this.state.player.exp} / {this.state.player.maxExp}</Text>
-                        <TouchableOpacity onPress={() => this.playerAttack(10)} style={styles.attack_button}><Text>Attack</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.playerAttack(25)} style={styles.attack_button}><Text>Strong Attack</Text></TouchableOpacity>
+                        <View>
+                            <TouchableOpacity onPress={() => this.playerAttack(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.playerAttack(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.goBack()} style={styles.back_button}><Text style={styles.button_text}>Go Back</Text></TouchableOpacity>
+                        </View>
                     </View>
                 </View>
 
@@ -164,9 +215,10 @@ const styles = StyleSheet.create({
         marginTop:"auto",
         marginBottom:"auto",
     },
-    monster_health:{
-        textAlign:"center",
-        fontSize:22,
+    health_bar:{
+        marginRight:"auto",
+        marginLeft:"auto",
+        marginBottom:5,
     },
 
 
@@ -177,8 +229,42 @@ const styles = StyleSheet.create({
 
         width:50,
         height:50,
-        borderRadius:5,
-        backgroundColor:"#ff6a6a",
+        borderWidth:2,
+        backgroundColor:"#7c142c",
+        borderRadius:90,
+        borderColor:"#e4934c",
     },
+    back_button:{
+        width:100,
+        height:100,
+
+        marginLeft:"auto",
+        marginRight:25,
+
+        borderWidth:2,
+        backgroundColor:"#7c142c",
+        borderRadius:90,
+        borderColor:"#e4934c",
+    },
+    button_text:{
+        fontFamily:"AncientText",
+        textAlign:"center",
+        marginTop:"auto",
+        marginBottom:"auto",
+        color:"#fff",
+    },
+    button_cool_down:{
+        fontFamily:"AncientText",
+        textAlign:"center",
+        marginTop:"auto",
+        marginBottom:"auto",
+        color:"#5a5858",
+    },
+    button_group:{
+        width:wd("100%"),
+
+
+        flexDirection:"row",
+    }
 
 })

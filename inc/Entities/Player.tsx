@@ -42,6 +42,9 @@ export default class Player{
 
     public levelUp(){
         this.level++
+        this.attack+=2
+        this.defense+=2
+        this.maxHealth+=10
         this.calculateExpTotal()
     }
 

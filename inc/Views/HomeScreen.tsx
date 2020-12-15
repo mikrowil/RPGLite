@@ -58,7 +58,7 @@ export default class HomeScreen extends React.Component<IProps,IState>{
                         <TouchableOpacity onPress={() => this.goToFightScreen()} style={styles.button_main}>
                             <Text style={styles.button_main_text}>Fight Sheep</Text>
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity onPress={() => this.goToFightScreen()} style={styles.button_main}>
                             <Text style={styles.button_main_text}>My Shop</Text>
                         </TouchableOpacity>
