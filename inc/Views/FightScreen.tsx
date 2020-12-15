@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {Text, View, StyleSheet,TouchableOpacity} from 'react-native'
+import {Text, View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Monster from "../Entities/Monster";
 import Player from "../Entities/Player";
 import {widthPercentageToDP as wd, heightPercentageToDP as hd} from 'react-native-responsive-screen'
 import {NavigationProp} from "react-navigation";
+// @ts-ignore
+import background from '../../assets/images/background_fightScreen_forest_1.jpg'
+
 
 let monster = new Monster(0,1,3,"Sheep",5,0,100,100,false)
 let player = new Player(0,1,0,0,"player",10,10,100,100,false)
@@ -111,9 +114,9 @@ export default class FightScreen extends React.Component<IProps,IState>{
                         <Text style={styles.monster_name}>{this.state.monster.name} LVL: {this.state.monster.level}</Text>
                         <Text style={styles.monster_health}>{monster.health} / {monster.maxHealth}</Text>
                     </View>
-                    <View style={styles.areaDisplay}>
+                    <ImageBackground source={background} style={styles.areaDisplay}>
 
-                    </View>
+                    </ImageBackground>
                     <View style={styles.playerDisplay}>
                         <Text>LVL: {this.state.player.level}   Health: {this.state.player.health} / {this.state.player.maxHealth}</Text>
                         <Text>EXP: {this.state.player.exp} / {this.state.player.maxExp}</Text>

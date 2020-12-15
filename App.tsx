@@ -1,21 +1,55 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, View,ActivityIndicator} from 'react-native'
 import {createAppContainer,createSwitchNavigator} from 'react-navigation'
 import VictoryScreen from "./inc/Views/VictoryScreen";
 import FightScreen from './inc/Views/FightScreen'
 import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
 import HomeScreen from "./inc/Views/HomeScreen";
+import {loadAsync} from "expo-font";
+
+interface IProps {
+
+}
+
+interface IState {
+    fontsLoaded:boolean,
+}
 
 
 
-export default class App extends React.Component{
+export default class App extends React.Component<IProps,IState>{
+    constructor(props : IProps) {
+        super(props);
+
+        this.state = {
+            fontsLoaded:false
+        }
+    }
+
+    loadFonts(){
+        loadAsync({
+            AncientText:require('./assets/fonts/Pixeboy-z8XGD.ttf')
+        }).then().finally(() =>{
+            this.setState({fontsLoaded:true})
+        })
+    }
+
   render() {
-    return (
-        <View style={styles.container}>
-            <AppContainer/>
-        </View>
-    );
+    if(this.state.fontsLoaded){
+        return (
+            <View style={styles.container}>
+                <AppContainer/>
+            </View>
+        );
+    }else {
+        this.loadFonts()
+        return (
+            <View>
+                <ActivityIndicator size = "large"/>
+            </View>
+        );
+    }
   }
 }
 
