@@ -1,20 +1,20 @@
 import React from "react";
 import {View, StyleSheet, Text, Animated} from "react-native";
 
-export default class HealthBar extends React.Component<any, any>{
+export default class ExperienceBar extends React.Component<any, any>{
     constructor(props:any) {
         super(props);
 
         this.state = {
-            animFill:new Animated.Value(0),
             max:this.props.max,
             cur:this.props.current,
+            animFill:new Animated.Value(0)
         }
     }
 
     anim = ()=>{
         let percent = this.props.current/this.props.max
-        let calc = 344 * percent
+        let calc = 144 * percent
         Animated.timing(this.state.animFill,{
             toValue:calc,
             useNativeDriver:false,
@@ -26,7 +26,6 @@ export default class HealthBar extends React.Component<any, any>{
         this.anim()
         return (
             <View style={styles.base}>
-
                 <Animated.View style={[styles.fill,{width:this.state.animFill}]}>
 
                 </Animated.View>
@@ -38,14 +37,13 @@ export default class HealthBar extends React.Component<any, any>{
 const styles = StyleSheet.create({
     base:{
         borderWidth:3,
-        backgroundColor:"#cd0000",
         position:"relative",
-        height:20,
-        width:350,
+        height:10,
+        width:150,
     },
     fill:{
         height:"100%",
-        backgroundColor:"#14d02a",
+        backgroundColor:"#e3c703",
 
     }
 })
