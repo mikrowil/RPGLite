@@ -3,11 +3,13 @@ import {Text, View, StyleSheet, TouchableOpacity, ImageBackground, Image} from '
 import Monster from "../Entities/Monster";
 import Player from "../Entities/Player";
 import {widthPercentageToDP as wd, heightPercentageToDP as hd} from 'react-native-responsive-screen'
+// @ts-ignore
 import HealthBar from "../Components/HealthBar";
 // @ts-ignore
 import background from '../../assets/images/background_fightScreen_forest_1.jpg'
 // @ts-ignore
 import enemy from '../../assets/images/enemy_sheep_01.png'
+// @ts-ignore
 import ExperienceBar from "../Components/ExperienceBar";
 // @ts-ignore
 import healthPotion from "../../assets/images/health_potion_01.png"
