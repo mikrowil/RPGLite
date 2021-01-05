@@ -1,3 +1,5 @@
+import Item from "./Item";
+
 export default class Player{
     id:number;
     level:number;
@@ -10,6 +12,7 @@ export default class Player{
     maxHealth:number;
     isDead:boolean;
 
+    inventory: Item[] | undefined;
 
     constructor(id: number,level:number,exp:number, maxExp:number,name: String, attack: number, defense: number, health: number, maxHealth: number, isDead: boolean) {
         this.id = id;

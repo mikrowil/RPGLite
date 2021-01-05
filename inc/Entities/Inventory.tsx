@@ -1,33 +1,33 @@
 import Item from "./Item";
 
-export default class Store {
-    private items:Item[]
+export default class Inventory {
+    private inventory:Item[]
 
 
     constructor(items: Item[]) {
-        this.items = items;
+        this.inventory = items;
     }
 
-    public getItems(){
-        return this.items
+    public getInventory(){
+        return this.inventory
     }
 
     public addItem(newEntry:Item){
-        this.items.push(newEntry)
+        this.inventory.push(newEntry)
     }
 
     public setItems(items:Item[]){
-        this.items = items
+        this.inventory = items
     }
 
     public isEmpty(){
-        return this.items.length <= 0
+        return this.inventory.length <= 0
     }
 
     public sortBy(property:String){
 
 
-        this.items = this.items.sort((i1,i2)=>{
+        this.inventory = this.inventory.sort((i1,i2)=>{
             if(property === "name"){
                 if(i1.name > i2.name){
                     return -1

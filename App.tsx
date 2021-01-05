@@ -5,9 +5,12 @@ import {createAppContainer,createSwitchNavigator} from 'react-navigation'
 import VictoryScreen from "./inc/Views/VictoryScreen";
 import FightScreen from './inc/Views/FightScreen'
 import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
+import LoadingScreenMain from "./inc/Views/LoadingScreenMain";
 // @ts-ignore
 import HomeScreen from "./inc/Views/HomeScreen";
+import StoreScreen from "./inc/Views/StoreScreen";
 import {loadAsync} from "expo-font";
+import LoginScreen from "./inc/Views/LoginScreen";
 
 interface IProps {
 
@@ -55,9 +58,11 @@ export default class App extends React.Component<IProps,IState>{
 }
 
 const Nav = createSwitchNavigator({
-    Fight:FightScreen,
+    LoadingMain:LoadingScreenMain,
+    Login:LoginScreen,
     Home:HomeScreen,
-
+    Fight:FightScreen,
+    Store:StoreScreen,
     Victory:VictoryScreen,
 
 })

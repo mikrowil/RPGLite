@@ -44,6 +44,12 @@ export default class HomeScreen extends React.Component<IProps,IState>{
         this.props.navigation.navigate("Fight")
     }
 
+    goToStoreScreen= () => {
+        //Can be ignored because props.navigation will always be the correct type
+        // @ts-ignore
+        this.props.navigation.navigate("Store")
+    }
+
     render() {
 
         return(
@@ -59,7 +65,7 @@ export default class HomeScreen extends React.Component<IProps,IState>{
                             <Text style={styles.button_main_text}>Fight Sheep</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.goToFightScreen()} style={styles.button_main}>
+                        <TouchableOpacity onPress={() => this.goToStoreScreen()} style={styles.button_main}>
                             <Text style={styles.button_main_text}>My Shop</Text>
                         </TouchableOpacity>
                     </View>
