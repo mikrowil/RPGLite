@@ -4,8 +4,8 @@ export default class Store {
     private items:Item[]
 
 
-    constructor(items: Item[]) {
-        this.items = items;
+    public constructor() {
+        this.items = []
     }
 
     public getItems(){

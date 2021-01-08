@@ -4,8 +4,8 @@ export default class Inventory {
     private inventory:Item[]
 
 
-    constructor(items: Item[]) {
-        this.inventory = items;
+    constructor() {
+        this.inventory = [];
     }
 
     public getInventory(){

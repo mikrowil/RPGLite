@@ -1,4 +1,5 @@
 import Item from "./Item";
+import Inventory from "./Inventory";
 
 export default class Player{
     id:number;
@@ -12,7 +13,8 @@ export default class Player{
     maxHealth:number;
     isDead:boolean;
 
-    inventory: Item[] | undefined;
+    inventory: Inventory;
+    money:number;
 
     constructor(id: number,level:number,exp:number, maxExp:number,name: String, attack: number, defense: number, health: number, maxHealth: number, isDead: boolean) {
         this.id = id;
@@ -26,7 +28,14 @@ export default class Player{
         this.maxHealth = maxHealth;
         this.isDead = isDead;
 
-        this.calculateExpTotal()
+        this.inventory = new Inventory()
+        this.money = 0
+
+        this.calculateAttributes()
+    }
+
+    setInventory(inv:Inventory){
+        this.inventory = inv
     }
 
     public gainExp(exp:number){
@@ -51,7 +60,13 @@ export default class Player{
         this.calculateExpTotal()
     }
 
+    public calculateAttributes(){
+        this.calculateExpTotal()
+    }
+
     public calculateExpTotal(){
         this.maxExp = Math.round((4 * (this.level**3))/5) + 5
     }
+
+
 }
