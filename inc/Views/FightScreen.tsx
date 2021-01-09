@@ -24,13 +24,15 @@ interface IProps {
 interface IState {
     monster:Monster,
     player:Player,
-    strongAttack: [boolean,number,any]
+    strongAttack: [boolean,number,any],
+
 
 }
 
 
 export default class FightScreen extends React.Component<IProps,IState>{
 
+    private inBattle:boolean
 
     constructor(props:IProps) {
         super(props);
@@ -41,6 +43,36 @@ export default class FightScreen extends React.Component<IProps,IState>{
             strongAttack:[false, 0,styles.button_text],
 
         }
+
+        this.inBattle = false
+    }
+
+    battle = (dmg:number,name:string) =>{
+
+        if(this.inBattle){
+            return
+        }
+
+        this.inBattle = true
+
+        this.playerAttack(dmg,name)
+
+        let monster = this.state.monster
+
+        this.delay(1000).finally(()=>{
+            //Monster Attack Function here
+            if(!monster.isDead){
+                this.monsterAttack()
+            }else {
+                let updatedPlayer = this.state.player
+                updatedPlayer.gainExp(this.state.monster.getExp())
+                this.setState({player:updatedPlayer})
+            }
+
+            this.inBattle = false
+        })
+
+
     }
 
     playerAttack = (dmg:number,name:string) => {
@@ -91,18 +123,19 @@ export default class FightScreen extends React.Component<IProps,IState>{
 
         this.setState({monster:updateMonster})
 
-        //Monster Attack Function here
-        if(!updateMonster.isDead){
-            this.monsterAttack()
-        }else {
-            let updatedPlayer = this.state.player
-            updatedPlayer.gainExp(this.state.monster.getExp())
-            this.setState({player:updatedPlayer})
-        }
+
+
+
 
         //Calculate status
 
     }
+
+    private delay(ms: number)
+    {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     useHealthPotion = () =>{
          let updatePlayer = this.state.player
         updatePlayer.health = updatePlayer.maxHealth
@@ -176,8 +209,8 @@ export default class FightScreen extends React.Component<IProps,IState>{
                         <ExperienceBar max = {this.state.player.maxExp}
                         current = {this.state.player.exp}/>
                         <View>
-                            <TouchableOpacity onPress={() => this.playerAttack(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.playerAttack(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
                             <TouchableOpacity onPress={() => this.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
 
                         </View>
