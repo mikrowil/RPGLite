@@ -17,6 +17,10 @@ import healthPotion from "../../assets/images/health_potion_01.png"
 let monster = new Monster(0,1,3,"Sheep",1,0,100,100,false)
 let player = new Player(0,1,0,0,"player",1,1,100,100,false)
 
+
+
+
+
 interface IProps {
     navigation:any,
 }
@@ -28,8 +32,6 @@ interface IState {
 
 
 }
-
-
 export default class FightScreen extends React.Component<IProps,IState>{
 
     private inBattle:boolean
@@ -66,7 +68,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
             }else {
                 let updatedPlayer = this.state.player
                 updatedPlayer.gainExp(this.state.monster.getExp())
-                this.setState({player:updatedPlayer})
+                this.props.navigation.navigate('Victory')
             }
 
             this.inBattle = false
@@ -206,8 +208,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
                     </ImageBackground>
                     <View style={styles.playerDisplay}>
                         <Text>LVL: {this.state.player.level}   Health: {this.state.player.health} / {this.state.player.maxHealth}</Text>
-                        <ExperienceBar max = {this.state.player.maxExp}
-                        current = {this.state.player.exp}/>
+
                         <View>
                             <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
                             <TouchableOpacity onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
