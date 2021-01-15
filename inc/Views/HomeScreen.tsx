@@ -68,6 +68,9 @@ export default class HomeScreen extends React.Component<IProps,IState>{
                         <TouchableOpacity onPress={() => this.goToStoreScreen()} style={styles.button_main}>
                             <Text style={styles.button_main_text}>My Shop</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.goToStoreScreen()} style={styles.button_main}>
+                            <Text style={styles.button_main_text}>Settings</Text>
+                        </TouchableOpacity>
                     </View>
                     <View>
 
@@ -111,6 +114,9 @@ const styles = StyleSheet.create({
         fontFamily:"AncientText",
 
         fontSize:50,
+
+        textShadowRadius:1,
+        textShadowColor:"#000000"
     },
     body:{
         width:wd("100%"),
@@ -119,30 +125,28 @@ const styles = StyleSheet.create({
     },
     button_main:{
 
-        borderColor:"#e4934c",
-        borderRadius:90,
-        borderWidth:2,
-
         padding:5,
+        paddingTop:50,
 
-        marginTop:"auto",
-        marginBottom:"auto",
+
         marginLeft:"auto",
         marginRight:"auto",
 
-        width:100,
-        height:100,
 
-        backgroundColor:"#7c142c",
+
+
     },
     button_main_text:{
-        fontSize:24,
+        fontSize:36,
         textAlign:"center",
         marginTop:"auto",
         marginBottom:"auto",
 
         color:"#ffffff",
         fontFamily:"AncientText",
+
+        textShadowRadius:1,
+        textShadowColor:"#000000"
 
     }
 
