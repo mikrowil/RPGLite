@@ -69,7 +69,9 @@ export default class FightScreen extends React.Component<IProps,IState>{
                 this.props.navigation.navigate('Victory',{monster:monsterToSend})
             }
 
-            this.inBattle = false
+            this.delay(1000).finally(()=>{
+                this.inBattle = false
+            })
         })
 
 
@@ -192,6 +194,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
 
         return (
                 <View style={styles.container}>
+                    <ImageBackground source={background} style={styles.areaDisplay}>
                     <View style={styles.enemyDisplay}>
                         <Text style={styles.monster_name}>{this.state.monster.name} LVL: {this.state.monster.level}</Text>
                         <View style={styles.health_bar}>
@@ -200,23 +203,27 @@ export default class FightScreen extends React.Component<IProps,IState>{
                         </View>
                     </View>
 
-                    <ImageBackground source={background} style={styles.areaDisplay}>
-                    <View style={styles.enemy_container}>
+                        
+
+                    <View  style={styles.enemy_container}>
                         <Image style={styles.enemy_img} source={enemy}/>
                     </View>
-                    </ImageBackground>
-                    <View style={styles.playerDisplay}>
-                        <Text>LVL: {this.state.player.level} {this.state.player.health}</Text>
-                        <HealthBarPlayer width={150} current={this.state.player.health} max={this.state.player.maxHealth}/>
 
+                    <View style={styles.playerDisplay} >
                         <View>
-                            <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
-                            <TouchableOpacity disabled={this.state.strongAttack[0]} onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
+                            <Text>LVL: {this.state.player.level} {this.state.player.health}</Text>
+                            <HealthBarPlayer width={wd("45%")} current={this.state.player.health} max={this.state.player.maxHealth}/>
 
+                            <View>
+                                <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
+                                <TouchableOpacity disabled={this.state.strongAttack[0]} onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
+
+                            </View>
+                            <TouchableOpacity onPress={() => this.goBack()} style={styles.back_button}><Text style={styles.button_text}>Go Back</Text></TouchableOpacity>
                         </View>
-                        <TouchableOpacity onPress={() => this.goBack()} style={styles.back_button}><Text style={styles.button_text}>Go Back</Text></TouchableOpacity>
                     </View>
+                    </ImageBackground>
                 </View>
 
             );
@@ -237,26 +244,33 @@ const styles = StyleSheet.create({
     enemyDisplay:{
         width:wd("100%"),
         height:hd("20%"),
-        backgroundColor:"red",
+        backgroundColor: 'rgba(0,0,0,0.2)'
     },
     areaDisplay:{
         width:wd("100%"),
-        height:hd("40%"),
+        height:hd("100%"),
         backgroundColor:"green",
     },
     playerDisplay:{
         width:wd("100%"),
         height:hd("40%"),
-        backgroundColor:"#33bff6",
+
+        backgroundColor: 'rgba(0,0,0,0.2)'
     },
+
 
     //monster styles
 
     monster_name:{
         textAlign:"center",
-        fontSize:26,
+        fontSize:36,
         marginTop:"auto",
         marginBottom:"auto",
+
+        color:"#ffffff",
+        textShadowRadius:1,
+        textShadowColor:"#000000",
+        fontFamily:"AncientText"
     },
     health_bar:{
         marginRight:"auto",
@@ -285,24 +299,22 @@ const styles = StyleSheet.create({
         margin:10,
 
 
-        width:50,
+        width:100,
         height:50,
         borderWidth:2,
-        backgroundColor:"#7c142c",
-        borderRadius:90,
-        borderColor:"#e4934c",
+        backgroundColor:"#b7b7b7",
+        borderRadius:10,
+
     },
     back_button:{
-        width:100,
-        height:100,
+        width:50,
+        height:20,
 
         marginLeft:"auto",
         marginRight:25,
 
         borderWidth:2,
-        backgroundColor:"#7c142c",
-        borderRadius:90,
-        borderColor:"#e4934c",
+
     },
     button_text:{
         fontFamily:"AncientText",
@@ -310,6 +322,8 @@ const styles = StyleSheet.create({
         marginTop:"auto",
         marginBottom:"auto",
         color:"#fff",
+        textShadowRadius:1,
+        textShadowColor:"#000000",
     },
     button_cool_down:{
         fontFamily:"AncientText",
