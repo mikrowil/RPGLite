@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {StyleSheet, View,ActivityIndicator} from 'react-native'
-import {createAppContainer,createSwitchNavigator} from 'react-navigation'
 import VictoryScreen from "./inc/Views/VictoryScreen";
 import FightScreen from './inc/Views/FightScreen'
 import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
@@ -11,6 +10,10 @@ import HomeScreen from "./inc/Views/HomeScreen";
 import StoreScreen from "./inc/Views/StoreScreen";
 import {loadAsync} from "expo-font";
 import LoginScreen from "./inc/Views/LoginScreen";
+import {createStackNavigator} from "@react-navigation/stack"
+import {NavigationContainer} from "@react-navigation/native"
+
+
 
 interface IProps {
 
@@ -20,7 +23,7 @@ interface IState {
     fontsLoaded:boolean,
 }
 
-
+const Stack = createStackNavigator()
 
 export default class App extends React.Component<IProps,IState>{
     constructor(props : IProps) {
@@ -42,9 +45,19 @@ export default class App extends React.Component<IProps,IState>{
   render() {
     if(this.state.fontsLoaded){
         return (
-            <View style={styles.container}>
-                <AppContainer/>
-            </View>
+
+                <NavigationContainer>
+                    <Stack.Navigator headerMode={"none"}>
+                        <Stack.Screen name={"LoadingScreenMain"} component={LoadingScreenMain}/>
+                        <Stack.Screen name={"Login"}component={LoginScreen}/>
+                        <Stack.Screen name={"Home"}component={HomeScreen}/>
+                        <Stack.Screen name={"Fight"}component={FightScreen}/>
+                        <Stack.Screen name={"Victory"}component={VictoryScreen}/>
+                        <Stack.Screen name={"Store"}component={StoreScreen}/>
+                    </Stack.Navigator>
+                </NavigationContainer>
+
+
         );
     }else {
         this.loadFonts()
@@ -57,17 +70,8 @@ export default class App extends React.Component<IProps,IState>{
   }
 }
 
-const Nav = createSwitchNavigator({
-    LoadingMain:LoadingScreenMain,
-    Login:LoginScreen,
-    Home:HomeScreen,
-    Fight:FightScreen,
-    Store:StoreScreen,
-    Victory:VictoryScreen,
 
-})
 
-const AppContainer = createAppContainer(Nav)
 
 const styles = StyleSheet.create({
     container:{

@@ -10,11 +10,12 @@ import backgroundImage from '../../assets/images/background_homeScreen.jpg'
 import backgroundTitle from '../../assets/images/background_homeScreen_title.jpg'
 import {useFonts} from "expo-font";
 import {Font} from "expo/build/removed.web";
+import {NavigationActions} from "react-navigation";
 
 
 interface IProps {
     //Left undefined because i dont know the data type
-    navigation:undefined
+    navigation:any
 }
 
 interface IState {
@@ -39,14 +40,11 @@ export default class HomeScreen extends React.Component<IProps,IState>{
 
 
     goToFightScreen = () => {
-        //Can be ignored because props.navigation will always be the correct type
-        // @ts-ignore
         this.props.navigation.navigate("Fight")
+
     }
 
     goToStoreScreen= () => {
-        //Can be ignored because props.navigation will always be the correct type
-        // @ts-ignore
         this.props.navigation.navigate("Store")
     }
 

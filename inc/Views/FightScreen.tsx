@@ -9,15 +9,9 @@ import HealthBar from "../Components/HealthBar";
 import background from '../../assets/images/background_fightScreen_forest_1.jpg'
 // @ts-ignore
 import enemy from '../../assets/images/enemy_sheep_01.png'
-// @ts-ignore
-import ExperienceBar from "../Components/ExperienceBar";
+import HealthBarPlayer from "../Components/HealthBarPlayer";
 // @ts-ignore
 import healthPotion from "../../assets/images/health_potion_01.png"
-
-let monster = new Monster(0,1,3,"Sheep",1,0,100,100,false)
-let player = new Player(0,1,0,0,"player",1,1,100,100,false)
-
-
 
 
 
@@ -40,8 +34,8 @@ export default class FightScreen extends React.Component<IProps,IState>{
         super(props);
 
         this.state = {
-            monster:monster,
-            player:player,
+            monster:new Monster(0,1,3,"Sheep",1,0,100,100,false),
+            player:new Player(0,1,0,0,"player",1,1,100,100,false),
             strongAttack:[false, 0,styles.button_text],
 
         }
@@ -68,7 +62,11 @@ export default class FightScreen extends React.Component<IProps,IState>{
             }else {
                 let updatedPlayer = this.state.player
                 updatedPlayer.gainExp(this.state.monster.getExp())
-                this.props.navigation.navigate('Victory')
+                let monsterToSend = new Array(this.state.monster)
+
+
+
+                this.props.navigation.navigate('Victory',{monster:monsterToSend})
             }
 
             this.inBattle = false
@@ -78,6 +76,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
     }
 
     playerAttack = (dmg:number,name:string) => {
+
 
         if(this.state.monster.isDead){
             this.reset()
@@ -158,7 +157,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
     }
 
     calculateDmg(dmg:number,who:String){
-        let calculatedDmg = 0;
+        let calculatedDmg;
         if(who === "player"){
             let diff = this.state.player.attack - this.state.monster.defense
             calculatedDmg = dmg + diff;
@@ -207,11 +206,12 @@ export default class FightScreen extends React.Component<IProps,IState>{
                     </View>
                     </ImageBackground>
                     <View style={styles.playerDisplay}>
-                        <Text>LVL: {this.state.player.level}   Health: {this.state.player.health} / {this.state.player.maxHealth}</Text>
+                        <Text>LVL: {this.state.player.level} {this.state.player.health}</Text>
+                        <HealthBarPlayer width={150} current={this.state.player.health} max={this.state.player.maxHealth}/>
 
                         <View>
                             <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
+                            <TouchableOpacity disabled={this.state.strongAttack[0]} onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
                             <TouchableOpacity onPress={() => this.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
 
                         </View>
