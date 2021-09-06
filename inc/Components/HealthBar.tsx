@@ -1,5 +1,6 @@
 import React from "react";
 import {View, StyleSheet, Text, Animated} from "react-native";
+import {widthPercentageToDP} from "react-native-responsive-screen";
 
 export default class HealthBar extends React.Component<any, any>{
     constructor(props:any) {
@@ -27,9 +28,10 @@ export default class HealthBar extends React.Component<any, any>{
         return (
             <View style={styles.base}>
 
-                <Animated.View style={[styles.fill,{width:this.state.animFill}]}>
+                <Animated.View style={[styles.fill,{width:this.state.animFill}]}/>
 
-                </Animated.View>
+
+                <Text style={styles.text}>{this.props.current} / {this.state.max}</Text>
             </View>
         );
     }
@@ -46,6 +48,19 @@ const styles = StyleSheet.create({
     fill:{
         height:"100%",
         backgroundColor:"#14d02a",
+
+    },
+    text:{
+
+        fontFamily:"AncientText",
+        color:"white",
+
+        textShadowRadius:1,
+        textShadowColor:"#000000",
+
+       position:"relative",
+        bottom:10,
+        left:5,
 
     }
 })

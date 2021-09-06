@@ -23,12 +23,12 @@ const Tab = createBottomTabNavigator()
 
 const ItemView = (props:any) =>{
     return(
-        <NavigationContainer>
+
             <Tab.Navigator>
                 <Tab.Screen name = {"Store"} children ={()=><BuyView store={props.store} />} />
                 <Tab.Screen name = {"Inventory"} children = {()=><SellView player={props.player} />}/>
             </Tab.Navigator>
-        </NavigationContainer>
+
     )
 }
 
@@ -78,7 +78,7 @@ export default class StoreScreen extends React.Component<IProps,IState>{
 
     }
     componentDidMount() {
-        this.createTestInventory()
+        //this.createTestInventory()
     }
 
     createStoreInventory(){

@@ -3,6 +3,7 @@ import React from 'react';
 import {StyleSheet, View,ActivityIndicator} from 'react-native'
 import VictoryScreen from "./inc/Views/VictoryScreen";
 import FightScreen from './inc/Views/FightScreen'
+import Test from "./inc/Views/Test"
 import {heightPercentageToDP as hd, widthPercentageToDP as wd} from "react-native-responsive-screen";
 import LoadingScreenMain from "./inc/Views/LoadingScreenMain";
 // @ts-ignore
@@ -12,8 +13,10 @@ import {loadAsync} from "expo-font";
 import LoginScreen from "./inc/Views/LoginScreen";
 import {createStackNavigator} from "@react-navigation/stack"
 import {NavigationContainer} from "@react-navigation/native"
+import { Audio } from 'expo-av/build';
 
 
+//export const menuMusic = new Audio.Sound()
 
 interface IProps {
 
@@ -21,6 +24,7 @@ interface IProps {
 
 interface IState {
     fontsLoaded:boolean,
+    soundsLoaded:boolean,
 }
 
 const Stack = createStackNavigator()
@@ -30,7 +34,8 @@ export default class App extends React.Component<IProps,IState>{
         super(props);
 
         this.state = {
-            fontsLoaded:false
+            fontsLoaded:false,
+            soundsLoaded:false,
         }
     }
 
@@ -42,18 +47,21 @@ export default class App extends React.Component<IProps,IState>{
         })
     }
 
+
+
   render() {
     if(this.state.fontsLoaded){
         return (
 
-                <NavigationContainer>
-                    <Stack.Navigator headerMode={"none"}>
+                <NavigationContainer >
+                    <Stack.Navigator  headerMode={"none"}>
                         <Stack.Screen name={"LoadingScreenMain"} component={LoadingScreenMain}/>
-                        <Stack.Screen name={"Login"}component={LoginScreen}/>
-                        <Stack.Screen name={"Home"}component={HomeScreen}/>
-                        <Stack.Screen name={"Fight"}component={FightScreen}/>
-                        <Stack.Screen name={"Victory"}component={VictoryScreen}/>
-                        <Stack.Screen name={"Store"}component={StoreScreen}/>
+                        <Stack.Screen name={"Login"} component={LoginScreen}/>
+                        <Stack.Screen name={"Home"} component={HomeScreen}/>
+                        <Stack.Screen name={"Fight"} component={FightScreen}/>
+                        <Stack.Screen name={"Victory"} component={VictoryScreen}/>
+                        <Stack.Screen name={"Store"} component={StoreScreen}/>
+                        <Stack.Screen name={"test"} component={Test}/>
                     </Stack.Navigator>
                 </NavigationContainer>
 
@@ -61,6 +69,7 @@ export default class App extends React.Component<IProps,IState>{
         );
     }else {
         this.loadFonts()
+
         return (
             <View>
                 <ActivityIndicator size = "large"/>
@@ -86,4 +95,10 @@ const styles = StyleSheet.create({
         height:hd("10%"),
         backgroundColor:"red",
     },
+    loading_icon:{
+        marginTop:"auto",
+        marginBottom:"auto",
+    }
+
+
 })

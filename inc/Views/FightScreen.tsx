@@ -12,21 +12,59 @@ import enemy from '../../assets/images/enemy_sheep_01.png'
 import HealthBarPlayer from "../Components/HealthBarPlayer";
 // @ts-ignore
 import healthPotion from "../../assets/images/health_potion_01.png"
-
+import {createStackNavigator} from "@react-navigation/stack";
+import {NavigationContainer} from "@react-navigation/native";
+import { Audio } from 'expo-av';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 
 interface IProps {
     navigation:any,
+    isFocused:boolean,
 }
 
 interface IState {
     monster:Monster,
     player:Player,
     strongAttack: [boolean,number,any],
-
-
+    music:Audio.Sound
 }
-export default class FightScreen extends React.Component<IProps,IState>{
+
+const MyTheme = {
+    dark: false,
+    colors: {
+        primary: 'rgb(255, 45, 85)',
+        background: 'rgb(242, 242, 242,0.0)',
+        card: 'rgb(255, 255, 255)',
+        text: 'rgb(28, 28, 30)',
+        border: 'rgb(199, 199, 204)',
+        notification: 'rgb(255, 69, 58)',
+    },
+};
+
+
+const Stack = createStackNavigator()
+
+const Menu = (props:any) =>{
+    return(
+
+            <View style={styles.menu_display}>
+                <Text>LVL: {props.player.level} {props.player.health}</Text>
+                <HealthBarPlayer width={wd("45%")} current={props.player.health} max={props.player.maxHealth}/>
+
+                <View>
+                    <TouchableOpacity onPress={() => props.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
+                    <TouchableOpacity disabled={props.strongAttack[0]} onPress={() => props.battle(25,"str")} style={styles.attack_button}><Text style={props.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => props.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
+
+                </View>
+                <TouchableOpacity onPress={() => props.goBack()} style={styles.back_button}><Text style={styles.button_text}>Go Back</Text></TouchableOpacity>
+            </View>
+
+    )
+}
+
+class FightScreen extends React.Component<IProps,IState>{
 
     private inBattle:boolean
 
@@ -37,10 +75,45 @@ export default class FightScreen extends React.Component<IProps,IState>{
             monster:new Monster(0,1,3,"Sheep",1,0,100,100,false),
             player:new Player(0,1,0,0,"player",1,1,100,100,false),
             strongAttack:[false, 0,styles.button_text],
+            music:new Audio.Sound()
 
         }
 
         this.inBattle = false
+    }
+
+    //Use to head straight to victory screen
+    private skipBattle(){
+        this.props.navigation.navigate('Victory',{monster:new Array(this.state.monster),player:this.state.player})
+    }
+
+    componentDidMount() {
+        //this.skipBattle()
+    }
+
+    async checkMusic() {
+        let status:boolean;
+
+        await this.state.music.getStatusAsync().then((s) => {
+            status = s.isLoaded
+        }).finally(async () => {
+            if(!status){
+                await this.state.music.loadAsync(require("../../assets/audio/bensound-epic.mp3"))
+                await this.playMusic()
+            }else {
+                await this.playMusic()
+            }
+        })
+    }
+
+    async playMusic(){
+
+        await this.state.music.playAsync()
+    }
+
+    async stopMusic(){
+        await this.state.music.unloadAsync()
+
     }
 
     battle = (dmg:number,name:string) =>{
@@ -66,7 +139,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
 
 
 
-                this.props.navigation.navigate('Victory',{monster:monsterToSend})
+                this.props.navigation.navigate('Victory',{monster:monsterToSend,player:updatedPlayer})
             }
 
             this.delay(1000).finally(()=>{
@@ -144,7 +217,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
         updatePlayer.health = updatePlayer.maxHealth
         this.setState({player:updatePlayer})
 
-        this.monsterAttack()
+
     }
 
     monsterAttack = () =>{
@@ -171,7 +244,7 @@ export default class FightScreen extends React.Component<IProps,IState>{
         return calculatedDmg
     }
 
-    goBack(){
+    goBack = ()=>{
         this.props.navigation.navigate('Home')
     }
 
@@ -191,10 +264,17 @@ export default class FightScreen extends React.Component<IProps,IState>{
 
     render() {
 
+        const {isFocused}=this.props
+
+        if(isFocused){
+            this.checkMusic().then()
+        }else {
+            this.stopMusic().then()
+        }
 
         return (
                 <View style={styles.container}>
-                    <ImageBackground source={background} style={styles.areaDisplay}>
+                    <ImageBackground source={background} style={styles.back_image}>
                     <View style={styles.enemyDisplay}>
                         <Text style={styles.monster_name}>{this.state.monster.name} LVL: {this.state.monster.level}</Text>
                         <View style={styles.health_bar}>
@@ -203,26 +283,27 @@ export default class FightScreen extends React.Component<IProps,IState>{
                         </View>
                     </View>
 
-                        
+                    <View style={styles.areaDisplay}>
 
                     <View  style={styles.enemy_container}>
                         <Image style={styles.enemy_img} source={enemy}/>
                     </View>
 
-                    <View style={styles.playerDisplay} >
-                        <View>
-                            <Text>LVL: {this.state.player.level} {this.state.player.health}</Text>
-                            <HealthBarPlayer width={wd("45%")} current={this.state.player.health} max={this.state.player.maxHealth}/>
-
-                            <View>
-                                <TouchableOpacity onPress={() => this.battle(10,"reg")} style={styles.attack_button}><Text style={styles.button_text}>Attack</Text></TouchableOpacity>
-                                <TouchableOpacity disabled={this.state.strongAttack[0]} onPress={() => this.battle(25,"str")} style={styles.attack_button}><Text style={this.state.strongAttack[2]}>Strong Attack</Text></TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.useHealthPotion()}><Image source={healthPotion}/></TouchableOpacity>
-
-                            </View>
-                            <TouchableOpacity onPress={() => this.goBack()} style={styles.back_button}><Text style={styles.button_text}>Go Back</Text></TouchableOpacity>
-                        </View>
                     </View>
+                        <View style={styles.playerDisplay}>
+                            <NavigationContainer theme={MyTheme} independent={true}>
+                            <Stack.Navigator  headerMode={"none"}>
+                                <Stack.Screen name={"Menu"} children={()=><Menu player={this.state.player}
+                                                                               monster = {this.state.monster}
+                                                                               strongAttack = {this.state.strongAttack}
+                                                                               battle={this.battle}
+                                                                               useHealthPotion={this.useHealthPotion}
+                                                                               goBack={this.goBack}
+                                />}/>
+                            </Stack.Navigator>
+                            </NavigationContainer>
+                        </View>
+
                     </ImageBackground>
                 </View>
 
@@ -231,14 +312,21 @@ export default class FightScreen extends React.Component<IProps,IState>{
     }
 }
 
+export default function (props:any){
+    const isFocused = useIsFocused()
+
+    return <FightScreen {...props} isFocused={isFocused} navigation={props.navigation}/>
+}
+
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
-        alignItems:"center",
-        justifyContent:"center",
-    },
 
+    },
+    back_image:{
+        height:"100%",
+        width:"100%",
+    },
     //display styles
 
     enemyDisplay:{
@@ -248,14 +336,17 @@ const styles = StyleSheet.create({
     },
     areaDisplay:{
         width:wd("100%"),
-        height:hd("100%"),
-        backgroundColor:"green",
+        height:hd("44%"),
+
     },
     playerDisplay:{
         width:wd("100%"),
-        height:hd("40%"),
+        height:hd("36%"),
 
         backgroundColor: 'rgba(0,0,0,0.2)'
+    },
+    menu_display:{
+        //backgroundColor: 'rgba(0,0,0,0.2)'
     },
 
 
@@ -268,7 +359,7 @@ const styles = StyleSheet.create({
         marginBottom:"auto",
 
         color:"#ffffff",
-        textShadowRadius:1,
+        textShadowRadius:2,
         textShadowColor:"#000000",
         fontFamily:"AncientText"
     },
@@ -322,7 +413,7 @@ const styles = StyleSheet.create({
         marginTop:"auto",
         marginBottom:"auto",
         color:"#fff",
-        textShadowRadius:1,
+        textShadowRadius:2,
         textShadowColor:"#000000",
     },
     button_cool_down:{
